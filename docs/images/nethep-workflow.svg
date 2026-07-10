@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="title desc">
+  <title id="title">Ne Thep workflow preview</title>
+  <desc id="desc">Preview of the Ne Thep Giao Nhau window and before-after rebar clash resolution.</desc>
+  <defs>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="520" fill="#f8fafc"/>
+
+  <g transform="translate(50 52)" filter="url(#shadow)">
+    <rect width="390" height="416" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+    <rect width="390" height="48" rx="12" fill="#1d4ed8"/>
+    <rect y="38" width="390" height="10" fill="#1d4ed8"/>
+    <text x="22" y="31" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Ne Thep Giao Nhau</text>
+
+    <g transform="translate(24 78)" font-family="Segoe UI, Arial, sans-serif">
+      <text x="0" y="0" fill="#64748b" font-size="13">Chon 2 thanh thep va vi tri sau khi ne.</text>
+
+      <g transform="translate(0 34)">
+        <rect width="342" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+        <text x="14" y="36" fill="#0f172a" font-size="14" font-weight="700">Thanh A</text>
+        <text x="100" y="36" fill="#166534" font-size="14">D25 - Id 18426</text>
+        <rect x="256" y="12" width="72" height="34" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+        <text x="292" y="34" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="700">Chon A</text>
+      </g>
+
+      <g transform="translate(0 106)">
+        <rect width="342" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+        <text x="14" y="36" fill="#0f172a" font-size="14" font-weight="700">Thanh B</text>
+        <text x="100" y="36" fill="#166534" font-size="14">D20 - Id 18495</text>
+        <rect x="256" y="12" width="72" height="34" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+        <text x="292" y="34" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="700">Chon B</text>
+      </g>
+
+      <rect x="0" y="188" width="342" height="96" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="16" y="28" fill="#334155" font-size="14" font-weight="700">Vi tri sau khi ne</text>
+      <circle cx="22" cy="55" r="7" fill="#2563eb"/>
+      <circle cx="22" cy="55" r="3" fill="#ffffff"/>
+      <text x="40" y="60" fill="#334155" font-size="14" font-weight="700">Thanh A nam tren thanh B</text>
+      <circle cx="22" cy="78" r="7" fill="#ffffff" stroke="#94a3b8"/>
+      <text x="40" y="83" fill="#475569" font-size="14">Thanh A nam duoi thanh B</text>
+
+      <rect x="164" y="318" width="94" height="42" rx="8" fill="#2563eb"/>
+      <text x="211" y="344" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">Ne thep</text>
+      <rect x="270" y="318" width="72" height="42" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+      <text x="306" y="344" text-anchor="middle" fill="#334155" font-size="14" font-weight="700">Dong</text>
+    </g>
+  </g>
+
+  <g transform="translate(520 72)" font-family="Segoe UI, Arial, sans-serif">
+    <text x="0" y="0" fill="#0f172a" font-size="26" font-weight="800">Tu giao nhau den thanh da ne</text>
+    <text x="0" y="34" fill="#64748b" font-size="16">Thanh A duoc tao lai theo curve moi, giu Mark, Comments, metadata va layout.</text>
+
+    <g transform="translate(0 82)">
+      <rect width="230" height="240" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="20" y="34" fill="#0f172a" font-size="18" font-weight="700">Truoc</text>
+      <line x1="44" y1="168" x2="190" y2="78" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+      <line x1="40" y1="100" x2="194" y2="178" stroke="#dc2626" stroke-width="10" stroke-linecap="round"/>
+      <circle cx="116" cy="134" r="18" fill="#fee2e2" stroke="#dc2626" stroke-width="3"/>
+      <text x="116" y="214" text-anchor="middle" fill="#64748b" font-size="13">Hai thanh cat nhau</text>
+    </g>
+
+    <line x1="270" y1="202" x2="362" y2="202" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <g transform="translate(404 82)">
+      <rect width="230" height="240" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="20" y="34" fill="#0f172a" font-size="18" font-weight="700">Sau</text>
+      <path d="M44 168 C82 146 96 104 142 88 C160 82 176 80 190 78" fill="none" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+      <line x1="40" y1="100" x2="194" y2="178" stroke="#dc2626" stroke-width="10" stroke-linecap="round"/>
+      <path d="M94 118 C114 86 148 76 184 76" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="116" y="214" text-anchor="middle" fill="#64748b" font-size="13">Thanh A ne len tren</text>
+    </g>
+
+    <g transform="translate(0 354)">
+      <rect width="634" height="68" rx="10" fill="#ecfdf5" stroke="#86efac"/>
+      <text x="22" y="28" fill="#166534" font-size="15" font-weight="800">Dung chuan Modeless WPF</text>
+      <text x="22" y="50" fill="#166534" font-size="13">PickObject va Transaction deu chay trong Revit.Async, tranh loi API context.</text>
+    </g>
+  </g>
+</svg>

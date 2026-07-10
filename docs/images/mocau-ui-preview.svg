@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">Vetheprevit main rebar UI preview</title>
+  <desc id="desc">Preview of the abutment rebar configuration interface and generated rebar concept.</desc>
+  <defs>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="1100" height="560" fill="#f8fafc"/>
+
+  <g transform="translate(52 48)" filter="url(#shadow)">
+    <rect width="424" height="464" rx="12" fill="url(#screen)" stroke="#cbd5e1"/>
+    <rect width="424" height="48" rx="12" fill="#0f766e"/>
+    <rect y="38" width="424" height="10" fill="#0f766e"/>
+    <text x="22" y="31" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Ve Thep Be Mo</text>
+
+    <g transform="translate(24 76)" font-family="Segoe UI, Arial, sans-serif">
+      <text x="0" y="0" fill="#0f172a" font-size="18" font-weight="700">1. Chon Family mo cau</text>
+      <rect x="0" y="18" width="376" height="42" rx="7" fill="#ecfeff" stroke="#67e8f9"/>
+      <text x="16" y="45" fill="#155e75" font-size="14" font-weight="700">Family da chon: Abutment_U_01</text>
+
+      <text x="0" y="94" fill="#0f172a" font-size="18" font-weight="700">2. Luoi thep Day be</text>
+      <g transform="translate(0 112)">
+        <text x="0" y="21" fill="#2563eb" font-size="14" font-weight="700">Duong kinh thep</text>
+        <rect x="176" y="0" width="200" height="32" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+        <text x="190" y="22" fill="#0f172a" font-size="14" font-weight="700">D25</text>
+      </g>
+      <g transform="translate(0 154)">
+        <text x="0" y="21" fill="#2563eb" font-size="14" font-weight="700">L ngam</text>
+        <rect x="176" y="0" width="200" height="32" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+        <text x="190" y="22" fill="#0f172a" font-size="14">1750</text>
+      </g>
+      <g transform="translate(0 196)">
+        <text x="0" y="21" fill="#2563eb" font-size="14" font-weight="700">K.cach / S.luong</text>
+        <rect x="176" y="0" width="82" height="32" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+        <rect x="274" y="0" width="102" height="32" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+        <text x="196" y="22" fill="#0f172a" font-size="14">200</text>
+        <text x="296" y="22" fill="#0f172a" font-size="14">25</text>
+      </g>
+
+      <rect x="0" y="262" width="376" height="70" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+      <text x="16" y="290" fill="#0f172a" font-size="15" font-weight="700">Ten thep va Shape</text>
+      <text x="16" y="315" fill="#64748b" font-size="13">Gan Mark, Comments, Shape va metadata tu dong.</text>
+
+      <rect x="0" y="356" width="180" height="44" rx="8" fill="#2563eb"/>
+      <text x="90" y="383" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Ve Thep</text>
+      <rect x="196" y="356" width="180" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+      <text x="286" y="383" text-anchor="middle" fill="#334155" font-size="15" font-weight="700">Luu thong so</text>
+    </g>
+  </g>
+
+  <g transform="translate(540 78)">
+    <text x="0" y="0" fill="#0f172a" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800">Mo hinh thep sau khi tao</text>
+    <text x="0" y="34" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="16">Tool tao nhieu nhom thep, gan ten va luu cau hinh de chay lai nhanh.</text>
+
+    <g transform="translate(0 82)">
+      <path d="M66 274 L182 90 L448 90 L562 274 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3"/>
+      <path d="M112 258 L206 126 L424 126 L516 258 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+      <g stroke="#2563eb" stroke-width="5" stroke-linecap="round">
+        <path d="M104 242 L520 242"/>
+        <path d="M120 218 L504 218"/>
+        <path d="M136 194 L488 194"/>
+        <path d="M152 170 L472 170"/>
+      </g>
+      <g stroke="#16a34a" stroke-width="4" stroke-linecap="round">
+        <path d="M184 110 L184 276"/>
+        <path d="M232 110 L232 276"/>
+        <path d="M280 110 L280 276"/>
+        <path d="M328 110 L328 276"/>
+        <path d="M376 110 L376 276"/>
+        <path d="M424 110 L424 276"/>
+      </g>
+      <g stroke="#dc2626" stroke-width="4" stroke-linecap="round">
+        <path d="M106 272 C148 236 180 214 228 206"/>
+        <path d="M520 272 C478 236 446 214 398 206"/>
+      </g>
+      <rect x="30" y="320" width="580" height="76" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+      <circle cx="60" cy="348" r="8" fill="#2563eb"/>
+      <text x="78" y="354" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="14">Luoi day / dinh</text>
+      <circle cx="220" cy="348" r="8" fill="#16a34a"/>
+      <text x="238" y="354" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="14">Thep mat ben</text>
+      <circle cx="396" cy="348" r="8" fill="#dc2626"/>
+      <text x="414" y="354" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="14">Thep cho / chong no</text>
+      <text x="60" y="380" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="13">Cac nhom duoc danh dau bang Extensible Storage de quan ly an toan.</text>
+    </g>
+  </g>
+</svg>

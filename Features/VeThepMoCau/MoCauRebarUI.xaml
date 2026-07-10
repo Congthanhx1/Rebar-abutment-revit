@@ -1,0 +1,1226 @@
+<Window x:Class="Vetheprevit.MoCau.MoCauRebarUI"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Công cụ Vẽ Mố Cầu - By CT" Height="740" Width="740" WindowStartupLocation="CenterScreen" Background="#F8FAFC" FontFamily="Segoe UI">
+    
+    <Window.Resources>
+        <!-- Modern Global Styles -->
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ContentPresenter Grid.Row="0" ContentSource="Header" RecognizesAccessKey="True" Margin="0,0,0,8" TextElement.FontWeight="Bold" TextElement.FontSize="14" TextElement.Foreground="#1E293B"/>
+                            
+                            <Border Grid.Row="1" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#0F172A" Opacity="0.05" BlurRadius="8" ShadowDepth="2" Direction="270"/>
+                                </Border.Effect>
+                                <ContentPresenter/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E2E8F0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#CBD5E1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        </Style>
+        
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
+        <Style TargetType="TabItem">
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="#E2E8F0" BorderThickness="1,1,1,0" Margin="0,0,4,0">
+                            <Grid>
+                                <Border Name="TopLine" Height="3" Background="#1E293B" VerticalAlignment="Top" Visibility="Hidden"/>
+                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FFFFFF"/>
+                                <Setter TargetName="TopLine" Property="Visibility" Value="Visible"/>
+                                <Setter Property="Foreground" Value="#1E293B"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F1F5F9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition x:Name="colPreview" Width="300"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Cột trái: Nhập liệu (Có TabControl) -->
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TabControl x:Name="tabMain"
+                        Grid.Row="0"
+                        SelectionChanged="TabMain_SelectionChanged">
+                <!-- TAB 1: BỆ MỐ -->
+                <TabItem Header="Bệ Mố" FontWeight="Bold">
+                    <ScrollViewer x:Name="scrollBeMo" VerticalScrollBarVisibility="Auto" Padding="0,5,5,0">
+                        <StackPanel>
+                
+                <!-- 1. Bệ Mố -->
+                <GroupBox x:Name="grpBeMoGeo" Header="1. Chọn Mố Cầu" Margin="0,0,0,16" FontWeight="Bold">
+                    <StackPanel Margin="0">
+                        <TextBlock x:Name="txtSelectedAbutment" Text="Đang chọn: (Chưa có)" Foreground="#1E293B" FontWeight="SemiBold" Margin="0,0,0,12" HorizontalAlignment="Center"/>
+                        <Button x:Name="BtnPick" Content="CHỌN MỐ CẦU" Background="#377A70" Foreground="White" FontWeight="Bold" Padding="12,10" Click="BtnPick_Click" BorderThickness="0" ToolTip="Nhấn để chọn Mố trong mô hình"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 2. Lưới thép Đáy Bệ -->
+                <GroupBox x:Name="grpBotRebar" Header="2. Lưới thép Đáy bệ" Margin="0,0,0,10" FontWeight="Bold">
+                    <StackPanel Margin="0,5,0,0">
+                        <!-- Thông số chung -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="Hình dạng thép:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="Blue" FontWeight="Normal"/>
+                            <ComboBox x:Name="cboShapeBot" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+                        </Grid>
+                        
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <!-- Lớp thép trên (phương dọc X) -->
+                        <CheckBox x:Name="chkDrawBotLong" Content="Thép trên / PDC (X)" IsChecked="True" FontWeight="SemiBold" Foreground="#1D4ED8" Margin="0,0,0,6" Checked="ChkDrawBotLong_CheckedChanged" Unchecked="ChkDrawBotLong_CheckedChanged"/>
+                        <Grid x:Name="gridBotLong" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Đường kính thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarBotLong" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="L ngàm:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Chiều dài đoạn bẻ đứng của lớp thép rải dọc X"/>
+                            <TextBox x:Name="txtBotMeshAnchorLong" Text="500" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ ngang (Y):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách ghi kích thước từ mép bê tông đến biên thanh thép theo phương dọc cầu"/>
+                            <TextBox x:Name="txtCoverBotLongX" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ dọc (X):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách ghi kích thước từ mép bê tông đến biên thanh thép theo phương ngang"/>
+                            <TextBox x:Name="txtCoverBotLongY" Text="100" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Cao độ đáy (Z):" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverBotZLong" Text="70" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutLBot" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceLongBot" Text="150" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyLongBot" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <!-- Lớp thép dưới (phương ngang Y) -->
+                        <CheckBox x:Name="chkDrawBotTrans" Content="Thép dưới / PNC (Y)" IsChecked="True" FontWeight="SemiBold" Foreground="#1D4ED8" Margin="0,0,0,6" Checked="ChkDrawBotTrans_CheckedChanged" Unchecked="ChkDrawBotTrans_CheckedChanged"/>
+                        <Grid x:Name="gridBotTrans" Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Đường kính thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarBotTrans" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="L ngàm (mm):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Chiều dài đoạn bẻ đứng của lớp thép rải ngang Y"/>
+                            <TextBox x:Name="txtBotMeshAnchorTrans" Text="500" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ ngang (Y):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách ghi kích thước từ mép bê tông đến biên thanh thép theo phương dọc cầu"/>
+                            <TextBox x:Name="txtCoverBotTransX" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ dọc (X):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách ghi kích thước từ mép bê tông đến biên thanh thép theo phương ngang"/>
+                            <TextBox x:Name="txtCoverBotTransY" Text="100" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Cao độ đáy (Z):" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverBotZTrans" Text="50" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutTBot" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceTransBot" Text="150" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyTransBot" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <CheckBox x:Name="chkSameTop" Content="Sử dụng chung thông số cho Thép Đỉnh bệ" IsChecked="True" Margin="5,0,0,10" Checked="ChkSameTop_CheckedChanged" Unchecked="ChkSameTop_CheckedChanged"/>
+
+                <GroupBox x:Name="grpTop" Header="3. Lưới thép Đỉnh bệ" Margin="0,0,0,10" FontWeight="Bold" IsEnabled="False">
+                    <StackPanel Margin="0,5,0,0">
+                        <!-- Thông số chung -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="Hình dạng thép (Shape):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="Blue" FontWeight="Normal"/>
+                            <ComboBox x:Name="cboShapeTop" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+                        </Grid>
+                        
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <!-- Lớp thép trên (phương dọc X) -->
+                        <CheckBox x:Name="chkDrawTopLong" Content="Lớp thép trên / Rải dọc (X)" IsChecked="True" FontWeight="SemiBold" Foreground="#1D4ED8" Margin="0,0,0,6" Checked="ChkDrawTopLong_CheckedChanged" Unchecked="ChkDrawTopLong_CheckedChanged"/>
+                        <Grid x:Name="gridTopLong" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Đường kính thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarTopLong" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="L ngàm (mm):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Chiều dài đoạn bẻ đứng của lớp thép đỉnh rải dọc X"/>
+                            <TextBox x:Name="txtTopMeshAnchorLong" Text="500" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ dọc (X):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopLongX" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ ngang (Y):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopLongY" Text="100" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Cao độ đỉnh (Z):" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopZLong" Text="70" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutLTop" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceLongTop" Text="150" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyLongTop" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <!-- Lớp thép dưới (phương ngang Y) -->
+                        <CheckBox x:Name="chkDrawTopTrans" Content="Lớp thép dưới / Rải ngang (Y)" IsChecked="True" FontWeight="SemiBold" Foreground="#1D4ED8" Margin="0,0,0,6" Checked="ChkDrawTopTrans_CheckedChanged" Unchecked="ChkDrawTopTrans_CheckedChanged"/>
+                        <Grid x:Name="gridTopTrans" Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Đường kính thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarTopTrans" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="L ngàm (mm):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Chiều dài đoạn bẻ đứng của lớp thép đỉnh rải ngang Y"/>
+                            <TextBox x:Name="txtTopMeshAnchorTrans" Text="500" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ dọc (X):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopTransX" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Lớp bảo vệ ngang (Y):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopTransY" Text="100" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Cao độ đỉnh (Z):" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverTopZTrans" Text="50" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutTTop" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceTransTop" Text="150" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyTransTop" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 4. Thép hông đứng -->
+                <GroupBox x:Name="grpVertSide" Header="4. Thép đứng (z)" Margin="0,0,0,10" FontWeight="Bold">
+                    <StackPanel Margin="0,5,0,0">
+                        <!-- Thông số chung -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="Hình dạng thép :" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Foreground="Blue" FontWeight="Normal"/>
+                            <ComboBox x:Name="cboShapeVertSide" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+                            
+                            <TextBlock Text="Lớp bảo vệ (XY):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverVertSide" Text="50" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                            
+                            <TextBlock Text="L ngàm:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Chiều dài phần ngàm của thép hông bẻ ngang vào trong đài"/>
+                            <TextBox x:Name="txtVertSideAnchor" Text="640" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                        </Grid>
+                        
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <!-- Thông số chiều cao (Z) -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <CheckBox x:Name="chkAutoSideHeight" Content="Tool tự động tính chiều cao bám lưới đỉnh/đáy" IsChecked="True" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5" Checked="chkAutoSideHeight_CheckedChanged" Unchecked="chkAutoSideHeight_CheckedChanged" Foreground="Blue"/>
+                            
+                            <TextBlock Text="Lớp bảo vệ đáy (Z):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverVertSideZBot" Text="50" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                            
+                            <TextBlock Text="Lớp bảo vệ đỉnh (Z):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverVertSideZTop" Text="50" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                            
+                            <TextBlock x:Name="lblSideHeight" Text="Chiều cao thép hông:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" Foreground="Blue" IsEnabled="False"/>
+                            <TextBox x:Name="txtSideHeight" Text="1500" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" IsEnabled="False"/>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <CheckBox x:Name="chkDrawSideX" Content="Vẽ phương dọc (X)" IsChecked="True" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Đường Kính Thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarSideX" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutVSideX" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceVertSideX" Text="200" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyVertSideX" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <TextBlock Text="Khoảng cách cách mép:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Khoảng cách từ mép bê tông đến thanh đầu tiên"/>
+                            <TextBox x:Name="txtOffsetSideX" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,10" Background="LightGray"/>
+
+                        <CheckBox x:Name="chkDrawSideY" Content="Vẽ phương ngang (Y)" IsChecked="True" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,5"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Đường Kính Thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <ComboBox x:Name="cboRebarSideY" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                            <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                                <ComboBox x:Name="cboLayoutVSideY" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                    <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                    <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                    <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                </ComboBox>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                    <TextBox x:Name="txtSpaceVertSideY" Text="200" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="txtQtyVertSideY" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <TextBlock Text="Khoảng cách cách mép:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" Foreground="Blue" ToolTip="Khoảng cách từ mép bê tông đến thanh đầu tiên"/>
+                            <TextBox x:Name="txtOffsetSideY" Text="100" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 5. Thép chống nở hông -->
+                <GroupBox x:Name="grpAntiBurst" Header="5. Thép chống nở hông" Margin="0,0,0,10" FontWeight="Bold">
+                    <StackPanel Margin="0,5,0,0">
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Khoảng cách đặt X (mm):" Grid.Row="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverAntiBurstX" Text="150" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25"/>
+                            <TextBlock Text="Khoảng cách đặt Y (mm):" Grid.Row="1" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverAntiBurstY" Text="150" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25"/>
+                            <TextBlock Text="Khoảng cách đáy/đỉnh Z (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox x:Name="txtCoverAntiBurstZ" Text="150" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Hình dạng thép (Shape):" VerticalAlignment="Center" Foreground="Blue" FontWeight="Normal"/>
+                            <ComboBox x:Name="cboShapeAntiBurst" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+                        </Grid>
+
+                        <CheckBox x:Name="chkDrawAntiBurstX" Content="Vẽ phương dọc (X)" IsChecked="True" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Chọn thép phương X:" VerticalAlignment="Center" Foreground="Blue" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="cboRebarAntiBurstX" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="DisplayName" IsEditable="True"/>
+                            <TextBlock Text="Chuỗi kích thước X:" Grid.Row="1" VerticalAlignment="Center" Foreground="Blue"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                                <TextBox x:Name="txtSpacingSequenceAntiBurstX"
+                                         Text="600 600 500 600 600 600"
+                                         Height="25"
+                                         ToolTip="Nhập khoảng cách giữa từng thanh, cách nhau bằng dấu cách. Ví dụ: 600 600 500 600"/>
+                                <TextBlock Text="Ví dụ: 600 600 500 600 600 600"
+                                           Foreground="#64748B"
+                                           FontSize="10"
+                                           Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <CheckBox x:Name="chkDrawAntiBurstY" Content="Vẽ phương ngang (Y)" IsChecked="True" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Chọn thép phương Y:" VerticalAlignment="Center" Foreground="Blue" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="cboRebarAntiBurstY" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="DisplayName" IsEditable="True"/>
+                            <TextBlock Text="Chuỗi kích thước Y:" Grid.Row="1" VerticalAlignment="Center" Foreground="Blue"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                                <TextBox x:Name="txtSpacingSequenceAntiBurstY"
+                                         Text="600 600"
+                                         Height="25"
+                                         ToolTip="Nhập khoảng cách giữa từng thanh, cách nhau bằng dấu cách."/>
+                                <TextBlock Text="Số thanh = số kích thước + 1"
+                                           Foreground="#64748B"
+                                           FontSize="10"
+                                           Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <CheckBox x:Name="chkAutoAntiBurstHeight"
+                                      Content="Tool tự động tính chiều cao bám lưới đỉnh/đáy"
+                                      IsChecked="True"
+                                      Grid.Row="0"
+                                      Grid.ColumnSpan="2"
+                                      Foreground="Blue"
+                                      Margin="0,5,0,0"
+                                      Checked="chkAutoAntiBurstHeight_CheckedChanged"
+                                      Unchecked="chkAutoAntiBurstHeight_CheckedChanged"/>
+                            <TextBlock x:Name="lblAntiBurstHeight" Text="Chiều cao thanh (mm):" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
+                            <TextBox x:Name="txtAntiBurstHeight" Text="1700" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" IsEnabled="False"/>
+                            <TextBlock Text="Chiều dài ngàm (mm):" Grid.Row="2" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtAntiBurstAnchor" Text="500" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25"/>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 5. Thép Chờ -->
+                <GroupBox x:Name="grpDowel" Header="5. Thép Chờ Thân Mố" Margin="0,0,0,10" FontWeight="Bold">
+                    <Grid Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="170"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Đường kính thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange"/>
+                        <ComboBox x:Name="cboRebarDowel" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                        <TextBlock Text="Thông số rải:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange"/>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                            <ComboBox x:Name="cboLayoutDowel" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                            </ComboBox>
+                            <WrapPanel Margin="0,5,0,0">
+                                <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                <TextBox x:Name="txtSpaceDowel" Text="200" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtQtyDowel" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <TextBlock Text="Đỉnh thép chờ:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange"/>
+                        <CheckBox x:Name="chkAutoDowelHeight" Content="Chạy tới đỉnh thân mố" Grid.Row="2" Grid.Column="1" Margin="0,5" FontWeight="Normal" IsChecked="False" Click="chkAutoDowelHeight_Click"/>
+
+                        <TextBlock x:Name="lblDowelHeight" Text="Chiều cao đoạn chờ:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange"/>
+                        <TextBox x:Name="txtDowelHeight" Text="1500" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Khoảng lùi thép chờ (y):" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange"/>
+                        <TextBox x:Name="txtDowelLongOffset" Text="50" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" ToolTip="Khoảng cách né vào theo phương dọc bệ mố"/>
+
+                        <TextBlock Text="Chiều dài đoạn ngàm:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="DarkOrange" ToolTip="Chiều dài phần thép được uốn nằm ngang ngàm vào bệ mố (mm)"/>
+                        <TextBox x:Name="txtDowelAnchor" Text="200" Grid.Row="5" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Hình dạng thép (Shape):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="DarkOrange" FontWeight="Normal"/>
+                        <ComboBox x:Name="cboShapeDowel" Grid.Row="6" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- 6. Thép Dọc Hông Chữ U -->
+                <GroupBox x:Name="grpHorizSide" Header="6. Thép Dọc Hông" Margin="0,0,0,10" FontWeight="Bold">
+                    <Grid Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="170"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox x:Name="chkDrawHorizSideX" Content="Vẽ phương dọc (X)" IsChecked="True" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5" FontWeight="SemiBold"/>
+                        <TextBlock Text="Chọn thép phương X:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal" Foreground="Purple"/>
+                        <ComboBox x:Name="cboRebarHorizSideX" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                        <CheckBox x:Name="chkDrawHorizSideY" Content="Vẽ phương ngang (Y)" IsChecked="True" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,5" FontWeight="SemiBold"/>
+                        <TextBlock Text="Chọn thép phương Y:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" Foreground="Purple"/>
+                        <ComboBox x:Name="cboRebarHorizSideY" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                        <TextBlock Text="Khoảng cách đặt thép X:" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal" Foreground="Purple" ToolTip="Lớp bảo vệ / khoảng cách từ mép bê tông bên hông đến thép"/>
+                        <TextBox x:Name="txtCoverHorizSideX" Text="50" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Khoảng cách đặt thép Y:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal" Foreground="Purple" ToolTip="Lớp bảo vệ thép dọc hông phương ngang"/>
+                        <TextBox x:Name="txtCoverHorizSideY" Text="50" Grid.Row="5" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Khoảng cách đặt thép Z:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" FontWeight="Normal" Foreground="Purple" ToolTip="Khoảng cách từ mặt đáy bê tông lên thanh thép chữ U đầu tiên"/>
+                        <TextBox x:Name="txtCoverBotHorizSide" Text="50" Grid.Row="6" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Thông số rải phương X:" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Normal" Foreground="Purple"/>
+                        <StackPanel Grid.Row="7" Grid.Column="1" Margin="0,5">
+                            <ComboBox x:Name="cboLayoutHorizSideX" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                            </ComboBox>
+                            <WrapPanel Margin="0,5,0,0">
+                                <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                <TextBox x:Name="txtSpaceHorizSideX" Text="600" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtQtyHorizSideX" Text="5" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <TextBlock Text="Thông số rải phương Y:" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0" FontWeight="Normal" Foreground="Purple"/>
+                        <StackPanel Grid.Row="8" Grid.Column="1" Margin="0,5">
+                            <ComboBox x:Name="cboLayoutHorizSideY" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                            </ComboBox>
+                            <WrapPanel Margin="0,5,0,0">
+                                <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                <TextBox x:Name="txtSpaceHorizSideY" Text="600" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtQtyHorizSideY" Text="5" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <TextBlock Text="Chiều dài ngàm:" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0" FontWeight="Normal" Foreground="Purple"/>
+                        <TextBox x:Name="txtHorizAnchor" Text="640" Grid.Row="9" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                        <TextBlock Text="Hình dạng thép (Shape):" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="Purple" FontWeight="Normal"/>
+                        <ComboBox x:Name="cboShapeHorizSide" Grid.Row="10" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="Name" IsEditable="True"/>
+
+                        <TextBlock Text="Vị trí giao nhau (trên/dưới):" Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Foreground="Purple" FontWeight="Normal"/>
+                        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                            <ComboBox x:Name="cboHorizSideTopPos" Width="170" Height="25" SelectedIndex="0">
+                                <ComboBoxItem Content="Phương X nằm trên (ngoài)"/>
+                                <ComboBoxItem Content="Phương Y nằm trên (ngoài)"/>
+                            </ComboBox>
+                            <Button x:Name="btnPickTopRebar" Content="Pick Chọn" Margin="10,0,0,0" Width="80" Height="25" Click="btnPickTopRebar_Click" Background="#FF007ACC" Foreground="White" BorderBrush="Transparent"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- TAB 2: THÂN MỐ -->
+                <TabItem Header="Thân Mố" FontWeight="Bold">
+                    <ScrollViewer x:Name="scrollThanMo" VerticalScrollBarVisibility="Auto" Padding="0,5,5,0">
+                        <StackPanel>
+                            <CheckBox x:Name="chkUseDowelAsStemVert" Content="Dùng chung Thép chờ mố (ở Tab Bệ mố) làm Thép đứng" IsChecked="True" FontWeight="Bold" Foreground="Red" Margin="0,5,0,15" Checked="chkUseDowelAsStemVert_CheckedChanged" Unchecked="chkUseDowelAsStemVert_CheckedChanged"/>
+                            <StackPanel x:Name="spStemVert" Visibility="Collapsed">
+                                <GroupBox x:Name="grpStemVertFront" Header="1. Thép đứng mặt trước (Vertical Front)" Margin="0,0,0,10" FontWeight="Bold">
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="ĐK Thép:" Grid.Row="0" VerticalAlignment="Center" Foreground="Blue"/>
+                                        <ComboBox x:Name="cboRebarStemVertFront" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="DisplayName" IsEditable="True"/>
+                                        <TextBlock Text="Lớp bảo vệ phương ngang:" Grid.Row="1" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="txtCoverStemVertFront" Text="50" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Lớp bảo vệ phương Z:" Grid.Row="2" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="txtCoverStemVertFrontZ" Text="50" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Thông số rải:" Grid.Row="3" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                            <ComboBox x:Name="cboLayoutStemVertFront" SelectedIndex="0" Height="25">
+                                                <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                                <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                                <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                            </ComboBox>
+                                            <WrapPanel Margin="0,5,0,0">
+                                                <TextBlock Text="K.cách:" Width="45" VerticalAlignment="Center"/>
+                                                <TextBox x:Name="txtSpaceStemVertFront" Text="150" Width="50" Height="25" Margin="0,0,10,0"/>
+                                                <TextBlock Text="S.lượng:" Width="50" VerticalAlignment="Center"/>
+                                                <TextBox x:Name="txtQtyStemVertFront" Text="15" Width="50" Height="25" IsEnabled="False"/>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                        <TextBlock Text="Đỉnh thép:" Grid.Row="4" VerticalAlignment="Center"/>
+                                        <CheckBox x:Name="chkAutoStemVertFrontHeight" Content="Chạy tới đỉnh thân mố" Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="True" Checked="chkAutoStemVertFrontHeight_CheckedChanged" Unchecked="chkAutoStemVertFrontHeight_CheckedChanged"/>
+                                        <TextBlock Text="Chiều cao thép (mm):" Grid.Row="5" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertFrontHeight" Text="5500" Grid.Row="5" Grid.Column="1" Margin="0,5" Height="25" IsEnabled="False"/>
+                                        <TextBlock Text="Khoảng lùi thép đứng:" Grid.Row="6" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertFrontLongOffset" Text="350" Grid.Row="6" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Chiều dài đoạn ngàm:" Grid.Row="7" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertFrontAnchor" Text="200" Grid.Row="7" Grid.Column="1" Margin="0,5" Height="25"/>
+                                    </Grid>
+                                </GroupBox>
+
+                                <GroupBox x:Name="grpStemVertBack" Header="2. Thép đứng mặt sau (Vertical Back)" Margin="0,0,0,10" FontWeight="Bold">
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="ĐK Thép:" Grid.Row="0" VerticalAlignment="Center" Foreground="Blue"/>
+                                        <ComboBox x:Name="cboRebarStemVertBack" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" DisplayMemberPath="DisplayName" IsEditable="True"/>
+                                        <TextBlock Text="Lớp bảo vệ phương ngang:" Grid.Row="1" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="txtCoverStemVertBack" Text="50" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Lớp bảo vệ phương Z:" Grid.Row="2" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="txtCoverStemVertBackZ" Text="50" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Thông số rải:" Grid.Row="3" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                            <ComboBox x:Name="cboLayoutStemVertBack" SelectedIndex="0" Height="25">
+                                                <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                                <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                                <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                            </ComboBox>
+                                            <WrapPanel Margin="0,5,0,0">
+                                                <TextBlock Text="K.cách:" Width="45" VerticalAlignment="Center"/>
+                                                <TextBox x:Name="txtSpaceStemVertBack" Text="150" Width="50" Height="25" Margin="0,0,10,0"/>
+                                                <TextBlock Text="S.lượng:" Width="50" VerticalAlignment="Center"/>
+                                                <TextBox x:Name="txtQtyStemVertBack" Text="15" Width="50" Height="25" IsEnabled="False"/>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                        <TextBlock Text="Đỉnh thép:" Grid.Row="4" VerticalAlignment="Center"/>
+                                        <CheckBox x:Name="chkAutoStemVertBackHeight" Content="Chạy tới đỉnh thân mố" Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="True" Checked="chkAutoStemVertBackHeight_CheckedChanged" Unchecked="chkAutoStemVertBackHeight_CheckedChanged"/>
+                                        <TextBlock Text="Chiều cao thép (mm):" Grid.Row="5" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertBackHeight" Text="5500" Grid.Row="5" Grid.Column="1" Margin="0,5" Height="25" IsEnabled="False"/>
+                                        <TextBlock Text="Khoảng lùi thép đứng:" Grid.Row="6" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertBackLongOffset" Text="350" Grid.Row="6" Grid.Column="1" Margin="0,5" Height="25"/>
+                                        <TextBlock Text="Chiều dài đoạn ngàm:" Grid.Row="7" VerticalAlignment="Center" Foreground="#FFFF7F00"/>
+                                        <TextBox x:Name="txtStemVertBackAnchor" Text="200" Grid.Row="7" Grid.Column="1" Margin="0,5" Height="25"/>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+
+                            <GroupBox x:Name="grpStemHoriz" Header="3. Thép ngang phân bố (Horizontal)" Margin="0,0,0,10" FontWeight="Bold">
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="ĐK Thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                                    <ComboBox x:Name="cboRebarStemHoriz" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                                    <TextBlock Text="Vị trí so với thép đứng:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal"/>
+                                    <ComboBox x:Name="cboHorizPosRelToVert" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" SelectedIndex="0" SelectionChanged="cboHorizPosRelToVert_SelectionChanged">
+                                        <ComboBoxItem Content="1. Nằm BÊN TRONG thép đứng"/>
+                                        <ComboBoxItem Content="2. Nằm BÊN NGOÀI thép đứng"/>
+                                        <ComboBoxItem Content="3. Tự nhập Khoảng cách X"/>
+                                    </ComboBox>
+
+                                    <TextBlock Text="Khoảng cách mặt trước/sau (X):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách lùi thép ngang từ mặt trước và mặt sau của thân mố (Bề dày mố)"/>
+                                    <TextBox x:Name="txtCoverStemHorizX" Text="50" Grid.Row="2" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" IsEnabled="False"/>
+
+                                    <TextBlock Text="Khoảng cách hai đầu mố (Y):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách lùi thép ngang từ 2 đầu bên hông của thân mố (Chiều dài mố)"/>
+                                    <TextBox x:Name="txtCoverStemHorizY" Text="350" Grid.Row="3" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                                    <TextBlock Text="Khoảng cách đặt thép Z:" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal" ToolTip="Khoảng cách từ đáy/đỉnh thân mố thụt vào"/>
+                                    <TextBox x:Name="txtCoverStemHorizZ" Text="50" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal"/>
+
+                                    <TextBlock Text="Thông số rải dọc cao độ:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal"/>
+                                    <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                        <ComboBox x:Name="cboLayoutStemHoriz" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                            <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                            <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                            <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                        </ComboBox>
+                                        <WrapPanel Margin="0,5,0,0">
+                                            <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                            <TextBox x:Name="txtSpaceStemHoriz" Text="200" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                            <TextBox x:Name="txtQtyStemHoriz" Text="15" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </GroupBox>
+
+                            <!-- 4. Thép đai / giằng -->
+                            <GroupBox x:Name="grpStemTie" Margin="0,0,0,10" FontWeight="Bold">
+                                <GroupBox.Header>
+                                    <TextBlock Text="4. Thép giằng / đai (Cross Ties)" FontWeight="Bold"/>
+                                </GroupBox.Header>
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="170"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="ĐK Thép:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                                    <ComboBox x:Name="cboRebarStemTie" Grid.Row="0" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="DisplayName" IsEditable="True"/>
+
+                                    <TextBlock Text="Lớp bảo vệ hai bên (Y):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Normal"/>
+                                    <TextBox x:Name="txtCoverStemTieY" Text="50" Grid.Row="1" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" ToolTip="Khoảng cách từ mép bên mố đến đai ngoài cùng"/>
+
+                                    <TextBlock Text="Thông số rải đứng (Z):" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" FontWeight="Normal"/>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5">
+                                        <ComboBox x:Name="cboLayoutStemTieV" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                            <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                            <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                            <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                        </ComboBox>
+                                        <WrapPanel Margin="0,5,0,0">
+                                            <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                            <TextBox x:Name="txtSpaceStemTieV" Text="600" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                            <TextBox x:Name="txtQtyStemTieV" Text="10" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Thông số rải dọc (Y):" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontWeight="Normal"/>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                        <ComboBox x:Name="cboLayoutStemTieH" SelectedIndex="0" Margin="0,0,0,5" Height="25">
+                                            <ComboBoxItem Content="1. Khoảng cách tối đa"/>
+                                            <ComboBoxItem Content="2. Số lượng chia đều"/>
+                                            <ComboBoxItem Content="3. Số lượng + Khoảng cách"/>
+                                        </ComboBox>
+                                        <WrapPanel Margin="0,5,0,0">
+                                            <TextBlock Text="K.cách:" VerticalAlignment="Center" Width="45"/>
+                                            <TextBox x:Name="txtSpaceStemTieH" Text="600" Width="50" Height="25" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBlock Text="S.lượng:" VerticalAlignment="Center" Width="50"/>
+                                            <TextBox x:Name="txtQtyStemTieH" Text="10" Width="50" Height="25" VerticalContentAlignment="Center" IsEnabled="False"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Hình dạng đai :" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                                    <ComboBox x:Name="cboTieShape" Grid.Row="4" Grid.Column="1" Margin="0,5" Height="25" FontWeight="Normal" DisplayMemberPath="Name" IsEditable="True" ToolTip="Chọn RebarShape dùng cho thép đai (ví dụ: M_01, M_00...)"/>
+
+                                    <TextBlock Text="K.cách đặt thép phương Z:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" FontWeight="Normal"/>
+                                    <TextBox x:Name="txtStemTieZ" Text="50" Grid.Row="5" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" ToolTip="Khoảng cách từ mép bê tông (theo phương Z) đến thanh đai đầu tiên"/>
+
+                                    <TextBlock Text="Hướng móc đai:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" FontWeight="Normal"/>
+                                    <ComboBox x:Name="cboTieHookDirection" Grid.Row="6" Grid.Column="1" Margin="0,5" Height="25" SelectedIndex="0">
+                                        <ComboBoxItem Content="1. Móc quay XUỐNG"/>
+                                        <ComboBoxItem Content="2. Móc quay LÊN"/>
+                                    </ComboBox>
+                                    
+                                    <TextBlock Text="Trừ đoạn bẻ L (mm):" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Normal" Foreground="Blue"/>
+                                    <TextBox x:Name="txtStemTieDrop" Text="0" Grid.Row="7" Grid.Column="1" Margin="0,5" Height="25" VerticalContentAlignment="Center" FontWeight="Normal" ToolTip="Nhập chiều dài bẻ L của đai M02 để tool tự động trừ tọa độ Z, giúp đai hạ đúng vị trí"/>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
+            <TextBlock x:Name="txtStatus" Grid.Row="1" Text="Trạng thái: Chưa chọn mố cầu" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
+
+            <Grid Grid.Row="2" Margin="0,10,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Mở File" Grid.Column="0" Margin="0,0,6,0" Padding="8,10" Click="BtnLoadFile_Click" ToolTip="Nhập thông số từ File"/>
+                <Button Content="Lưu File" Grid.Column="1" Margin="0,0,6,0" Padding="8,10" Click="BtnSaveFile_Click" ToolTip="Xuất thông số ra File"/>
+                <Button x:Name="BtnExportExcel" Content="Xuất Excel" Grid.Column="2" Margin="0,0,6,0" Padding="8,10" Background="#1D4ED8" Foreground="White" BorderThickness="0" Click="BtnExportFootingExcel_Click"/>
+                <Button Content="Hủy" Grid.Column="3" Margin="0,0,6,0" Padding="8,10" Background="#991B1B" Foreground="White" BorderThickness="0" FontWeight="SemiBold" Click="BtnCancel_Click"/>
+                <Button x:Name="BtnDrawRebar" Content="Vẽ Thép" Grid.Column="4" Padding="8,10" Background="#377A70" Foreground="White" BorderThickness="0" FontWeight="Bold" Click="BtnDraw_Click"/>
+            </Grid>
+        </Grid>
+
+        <!-- Cột phải: Bảng điều hướng nhanh & Cấu hình -->
+        <Border Grid.Column="1" BorderBrush="#E2E8F0" BorderThickness="1" Background="#FFFFFF" CornerRadius="8" Margin="16,0,0,0" Padding="0">
+            <Border.Effect>
+                <DropShadowEffect Color="#0F172A" Opacity="0.03" BlurRadius="8" ShadowDepth="2"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Grid Grid.Row="0" Margin="8,8,8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="BtnSaveSettings" Grid.Column="0" Content="LƯU" Background="#1E293B" Foreground="#FFFFFF" FontWeight="Bold" Padding="8,8" Margin="0,0,5,0" BorderThickness="0" ToolTip="Lưu trực tiếp thông số đang nhập vào dự án Revit để lần sau dùng lại" Click="BtnSaveSettings_Click"/>
+                    <Button x:Name="BtnOpenNamingUI" Grid.Column="1" Content="TÊN THÉP" Background="#377A70" Foreground="#FFFFFF" FontWeight="Bold" Padding="8,8" Margin="0,0,5,0" BorderThickness="0" ToolTip="Thiết lập tên thép (Mark)" Click="BtnOpenNamingUI_Click"/>
+                    <ToggleButton x:Name="btnTogglePreview" Grid.Column="2" Content="👁" FontWeight="Bold" Background="#CBD5E1" Foreground="#1E293B" Padding="10,8" BorderThickness="0" ToolTip="Bật/Tắt khung Preview 2D" IsChecked="True" Click="BtnTogglePreview_Click"/>
+                </Grid>
+
+                <TabControl Grid.Row="1" TabStripPlacement="Top" BorderThickness="0,1,0,0" BorderBrush="#E2E8F0" Background="Transparent" Margin="0">
+                <TabControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1"/>
+                    </ItemsPanelTemplate>
+                </TabControl.ItemsPanel>
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="Padding" Value="0,8"/>
+                        <Setter Property="Background" Value="#F8FAFC"/>
+                        <Setter Property="Foreground" Value="#64748B"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TabItem">
+                                    <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="#E2E8F0" BorderThickness="1,1,1,0" CornerRadius="6,6,0,0" Margin="1,4,1,0">
+                                        <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="#FFFFFF"/>
+                                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/>
+                                            <Setter TargetName="Border" Property="Margin" Value="1,2,1,-1"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="#F1F5F9"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabControl.Resources>
+                <TabItem Header="CẤU HÌNH">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="pnlDrawOptions" Margin="10,10,10,10" TextElement.FontWeight="Normal">
+                            <Border Background="#F8FAFC" Padding="4" CornerRadius="4" Margin="0,0,0,8">
+                                <TextBlock Text="--- BỆ MỐ ---" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center" FontSize="11"/>
+                            </Border>
+                            <CheckBox x:Name="chkDrawBotRebar" Content="Thép đáy bệ" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawTopRebar" Content="Thép đỉnh bệ" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawVertSideRebar" Content="Thép hông đứng" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawDowelRebar" Content="Thép chờ thân mố" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawHorizSideRebar" Content="Thép dọc hông" IsChecked="True" Margin="0,0,0,12"/>
+                            <CheckBox x:Name="chkDrawAntiBurstRebar" Content="Thép chống nở hông" IsChecked="True" Margin="0,0,0,12"/>
+
+                            <Border Background="#F8FAFC" Padding="4" CornerRadius="4" Margin="0,0,0,8">
+                                <TextBlock Text="--- THÂN MỐ ---" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center" FontSize="11"/>
+                            </Border>
+                            <CheckBox x:Name="chkDrawStemVertFront" Content="Thép đứng trước" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawStemVertBack" Content="Thép đứng sau" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawStemHoriz" Content="Thép ngang" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox x:Name="chkDrawStemTie" Content="Thép đai" IsChecked="True" Margin="0,0,0,6"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="MỤC LỤC">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,10,10,10" TextElement.FontWeight="Normal">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFFFFF"/>
+                                    <Setter Property="Foreground" Value="#334155"/>
+                                    <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Padding" Value="10,6"/>
+                                    <Setter Property="Margin" Value="0,0,0,6"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                                                    <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#F1F5F9"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="#E2E8F0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Resources>
+                            <StackPanel x:Name="navBeMo">
+                                <Border Background="#F8FAFC" Padding="4" CornerRadius="4" Margin="0,0,0,8">
+                                    <TextBlock Text="--- TAB BỆ MỐ ---" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center" FontSize="11"/>
+                                </Border>
+                                <Button Content="1. Chọn Mố Cầu" Click="Nav_BeMoGeo_Click"/>
+                                <Button Content="2. Thép Đáy bệ" Click="Nav_BotRebar_Click"/>
+                                <Button Content="3. Thép Đỉnh bệ" Click="Nav_TopRebar_Click"/>
+                                <Button Content="4. Thép đứng" Click="Nav_VertSide_Click"/>
+                                <Button Content="5. Thép chống nở hông" Click="Nav_AntiBurst_Click"/>
+                                <Button Content="6. Thép chờ thân mố" Click="Nav_Dowel_Click"/>
+                                <Button Content="7. Thép dọc hông" Click="Nav_HorizSide_Click" Margin="0,0,0,16"/>
+                            </StackPanel>
+
+                            <StackPanel x:Name="navThanMo">
+                                <Border Background="#F8FAFC" Padding="4" CornerRadius="4" Margin="0,0,0,8">
+                                    <TextBlock Text="--- TAB THÂN MỐ ---" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center" FontSize="11"/>
+                                </Border>
+                                <Button Content="1. Thép đứng Trước" Click="Nav_StemVertFront_Click"/>
+                                <Button Content="2. Thép đứng Sau" Click="Nav_StemVertBack_Click"/>
+                                <Button Content="3. Thép ngang" Click="Nav_StemHoriz_Click"/>
+                                <Button Content="4. Thép đai" Click="Nav_StemTie_Click" Margin="0,0,0,16"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+            </Grid>
+        </Border>
+
+        <Border x:Name="borderPreview" Grid.Column="2"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1"
+                Background="#FFFFFF"
+                CornerRadius="8"
+                Margin="16,0,0,0"
+                Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="txtPreviewTitle"
+                           Grid.Row="0"
+                           Text="PREVIEW 2D"
+                           Foreground="#1E293B"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           HorizontalAlignment="Center"
+                           Margin="0,2,0,10"/>
+
+                <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,8">
+                    <Button x:Name="btnPreviewPlan"
+                            Content="Mặt bằng"
+                            Tag="Plan"
+                            Padding="6,6"
+                            FontSize="11"
+                            Click="PreviewView_Click"/>
+                    <Button x:Name="btnPreviewFront"
+                            Content="Chiếu đứng"
+                            Tag="Front"
+                            Padding="6,6"
+                            FontSize="11"
+                            Click="PreviewView_Click"/>
+                    <Button x:Name="btnPreviewSide"
+                            Content="Chiếu cạnh"
+                            Tag="Side"
+                            Padding="6,6"
+                            FontSize="11"
+                            Click="PreviewView_Click"/>
+                </UniformGrid>
+
+                <Border Grid.Row="2"
+                        Background="#F8FAFC"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        ClipToBounds="True">
+                    <Canvas x:Name="previewCanvas"
+                            Background="Transparent"
+                            SizeChanged="PreviewCanvas_SizeChanged"
+                            PreviewMouseWheel="PreviewCanvas_MouseWheel"
+                            MouseLeftButtonDown="PreviewCanvas_MouseLeftButtonDown"/>
+                </Border>
+
+                <TextBlock x:Name="txtPreviewHint"
+                           Grid.Row="3"
+                           Text="Cuộn chuột để zoom, nhấp đúp để về 100%."
+                           Foreground="#64748B"
+                           FontSize="11"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="4,10,4,2"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

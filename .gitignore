@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Revit / local runtime artifacts
+*.log
+*.bak
+*.tmp
+*.cache
+
+# OS files
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <!-- Khai báo Application để tự động chạy khi Revit khởi động (Tạo Ribbon Tab) -->
+  <AddIn Type="Application">
+    <Name>Vẽ Thép Revit Application</Name>
+    <Assembly>D:\DLL\Ve thep revit\2 (main)\Vetheprevit\bin\Debug\net10.0-windows\Vetheprevit.dll</Assembly>
+    <AddInId>8B145E7A-3B64-4428-A4BA-2114251CA934</AddInId>
+    <FullClassName>Vetheprevit.MoCau.App</FullClassName>
+    <VendorId>TOOL_CT</VendorId>
+    <VendorDescription>Vẽ Thép Mố Cầu</VendorDescription>
+  </AddIn>
+</RevitAddIns>

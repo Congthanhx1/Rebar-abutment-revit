@@ -1,0 +1,181 @@
+<Window x:Class="Vetheprevit.MoCau.TiltRebarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Né Thép Giao Nhau"
+        Height="330"
+        Width="430"
+        MinHeight="320"
+        MinWidth="420"
+        WindowStartupLocation="CenterOwner"
+        Background="#F8FAFC"
+        FontFamily="Segoe UI"
+        ShowInTaskbar="False">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E2E8F0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#CBD5E1"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Chọn thanh A cần uốn, chọn thanh B cần né, rồi chọn vị trí A so với B."
+                   TextWrapping="Wrap"
+                   Foreground="#64748B"
+                   FontSize="12"
+                   Margin="0,0,0,14"/>
+
+        <Border Grid.Row="1"
+                Background="#FFFFFF"
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="12"
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="96"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Thanh A"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Foreground="#0F172A"/>
+                <TextBlock x:Name="TxtRebarA"
+                           Grid.Column="1"
+                           Text="Chưa chọn"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="#64748B"
+                           Margin="8,0"/>
+                <Button x:Name="BtnPickA"
+                        Grid.Column="2"
+                        Content="Chọn A"
+                        Click="BtnPickA_Click"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Background="#FFFFFF"
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="12"
+                Margin="0,0,0,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="96"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Thanh B"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Foreground="#0F172A"/>
+                <TextBlock x:Name="TxtRebarB"
+                           Grid.Column="1"
+                           Text="Chưa chọn"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="#64748B"
+                           Margin="8,0"/>
+                <Button x:Name="BtnPickB"
+                        Grid.Column="2"
+                        Content="Chọn B"
+                        Click="BtnPickB_Click"/>
+            </Grid>
+        </Border>
+
+        <GroupBox Grid.Row="3"
+                  Header="Vị trí sau khi né"
+                  Foreground="#334155"
+                  FontWeight="Bold"
+                  BorderBrush="#CBD5E1"
+                  Padding="10"
+                  Margin="0,0,0,14">
+            <StackPanel>
+                <RadioButton x:Name="RadAAbove"
+                             Content="Thanh A nằm trên thanh B"
+                             IsChecked="True"/>
+                <RadioButton x:Name="RadABelow"
+                             Content="Thanh A nằm dưới thanh B"/>
+                <TextBlock x:Name="TxtStatus"
+                           Text="Sẵn sàng."
+                           TextWrapping="Wrap"
+                           Foreground="#64748B"
+                           FontSize="12"
+                           Margin="0,10,0,0"/>
+            </StackPanel>
+        </GroupBox>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="90"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BtnRun"
+                    Grid.Column="1"
+                    Content="Né thép"
+                    Background="#2563EB"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Click="BtnRun_Click"/>
+            <Button x:Name="BtnClose"
+                    Grid.Column="3"
+                    Content="Đóng"
+                    Click="BtnClose_Click"/>
+        </Grid>
+    </Grid>
+</Window>
